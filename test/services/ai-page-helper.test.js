@@ -1,4 +1,5 @@
-const aiHelperService = require('../../src/services/ai-page-helper-service');
+// Fixed import to match your export structure
+const { AiPageHelperService, default: aiHelperServiceInstance } = require('../../src/services/ai-page-helper-service');
 const fs = require('fs');
 const { OpenAI } = require('openai');
 const yaml = require('js-yaml');
@@ -18,20 +19,21 @@ describe('AIHelperService', () => {
         MODEL_NAME: 'test-model',
         MAX_TOKENS: 1000
     };
-    let aiHelperService;
+    let aiHelperService; // This will be our test instance
 
-
-    // In your test file's beforeEach block
     beforeEach(() => {
         // Reset all mocks
         jest.clearAllMocks();
 
-        // Mock fs.existsSync to return true for config.yaml paths
-        fs.existsSync = jest.fn().mockImplementation(path => {
-            if (path.includes('config.yaml')) {
-                return true;
-            }
-            return false;
+        // Mock fs.existsSync to return true for config path
+        fs.existsSync = jest.fn().mockReturnValue(true);
+
+        // Mock config loading
+        yaml.load.mockReturnValue(mockConfig);
+        fs.readFileSync.mockImplementation((filePath) => {
+            if (filePath.includes('config.yaml')) return 'mock config content';
+            if (filePath.includes('locator_prompt.txt')) return 'test prompt';
+            throw new Error('File not found');
         });
 
         // Mock OpenAI client
@@ -43,10 +45,8 @@ describe('AIHelperService', () => {
             }
         }));
 
+        // Create a fresh instance for testing
         aiHelperService = new AiPageHelperService();
-        aiHelperService.loadConfig = jest.fn().mockReturnValue(mockConfig);
-        aiHelperService.config = mockConfig;
-
     });
 
     describe('findLocator', () => {
@@ -78,20 +78,32 @@ describe('AIHelperService', () => {
     });
 
     describe('config loading', () => {
-        it('should load config correctly', () => {
-            expect(aiHelperService.config).toEqual(mockConfig);
+        it('should handle config loading errors', () => {
+            // Mock yaml.load to throw an error
+            yaml.load.mockImplementation(() => {
+                throw new Error('Config error');
+            });
+
+            // Expect creating a new instance to throw
+            expect(() => new AiPageHelperService()).toThrow('Config error');
         });
 
+
+
         it('should exit process when config loading fails', () => {
+            process.env.TEST_EXIT_BEHAVIOR = 'true';
+            fs.existsSync.mockReturnValue(true);
             yaml.load.mockImplementation(() => {
                 throw new Error('Config error');
             });
             const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
 
-            // Trigger config loading by creating new instance
-            new aiHelperService.constructor();
+            new AiPageHelperService();
 
             expect(mockExit).toHaveBeenCalledWith(1);
+
+            delete process.env.TEST_EXIT_BEHAVIOR;
+            mockExit.mockRestore();
         });
     });
 
