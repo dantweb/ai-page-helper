@@ -1,0 +1,36 @@
+{
+  "name": "@dantweb/ai-page-helper",
+  "version": "1.0.0",
+  "main": "src/services/ai-page-helper.js",
+  "files": [
+    "src/**/*",
+    "prompts/**/*",
+    "config.yaml"
+  ],
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "openai": "^4.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage --collectCoverageFrom='src/**/*.js'",
+    "lint": "eslint src test",
+    "debug": "node --inspect-brk node_modules/.bin/jest --runInBand --config=jest.config.js"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "mockdate": "^3.0.5",
+    "ts-jest": "^29.3.2"
+  }
+}

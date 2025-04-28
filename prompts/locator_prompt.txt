@@ -1,0 +1,13 @@
+Analyze the provided HTML structure and identify the most appropriate locator for the specified element.
+Consider the following criteria:
+- Prefer stable attributes like ID or data-testid
+- If no good attributes exist, create a XPath expression
+- Prioritize semantic HTML elements
+- Consider element hierarchy and surrounding context
+
+The response should be in JSON format with the following structure:
+{
+    "locator": "string",
+    "type": "css|xpath",
+    "confidence": 0-100
+}
