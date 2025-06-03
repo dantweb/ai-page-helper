@@ -1,4 +1,4 @@
 FEATHERLESS_API_URL: "https://api.deepseek.com/"
-FEATHERLESS_API_KEY: "sk-15d75dc3b55148e7b98cdaf755b989bb"
+FEATHERLESS_API_KEY: "sk-xxxxxxxxxxx"
 MODEL_NAME: "deepseek-chat"
 MAX_TOKENS: 1000
