@@ -15,6 +15,13 @@ sitewatch:
       prompt: Add 2 products to cart
       acceptance: you see a popup and number 2 in the icon near the mini-cart
 
+    - name: Add product to cart
+      prompt: Add 5000 items of a random product to cart
+      acceptance: you see a popup and number 5002 in the icon near the mini-cart
+      on_error:
+        try: log error
+        catch: continue
+
     - name: Checkout
       prompt:
         prompt_str: Open minibasket and click checkout
