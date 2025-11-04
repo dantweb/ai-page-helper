@@ -21,6 +21,11 @@ sitewatch:
         expected_actions:
           - open minibasket
           - click checkout
+        expected_action_sequence:
+          - get minibasket node
+          - click on it
+          - get node, which is the checkout button
+          - click on it
       acceptance:
         - you see the select payment method page
 

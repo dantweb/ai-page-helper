@@ -1,4 +1,0 @@
-FEATHERLESS_API_URL: "https://api.example.com"
-FEATHERLESS_API_KEY: "test-key-for-testing-only"
-MODEL_NAME: "test-model"
-MAX_TOKENS: 1000
