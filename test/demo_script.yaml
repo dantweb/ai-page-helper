@@ -1,0 +1,32 @@
+sitewatch:
+  environtment: dev
+  url: https://www.google.com
+  username: ${TEST_USERNAME}
+  password: ${TEST_PASSWORD}
+  timeout: 10
+  jobs:
+    - name: Test login
+      prompt: Login to shop
+      user: sitewatch.username
+      password: sitewatch.password
+      acceptance: you are on the home page and see no errors
+
+    - name: Add products to cart
+      prompt: Add 2 products to cart
+      acceptance: you see a popup and number 2 in the icon near the minicart
+
+    - name: Checkout
+      prompt: Open minibasket and click checkout
+
+    - name: Select payment method
+      prompt: Select payment method Google Pay
+      on_error:
+        try: select another payment method
+        catch: failed test
+
+    - name: Place order
+      prompt: Click place order and use username=${sitewatch.username} password=${sitewatch.password}
+      acceptance:
+        - you see Thank you page and an order number
+
+
